@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="fa54ce62-4e23-4381-9145-ed5dd7542372" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="$PROJECT_DIR$/../../../Meaven/apache-maven-3.6.1" />
+        <option name="userSettingsFile" value="D:\APP\Meaven\apache-maven-3.6.1\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+        <option name="vmOptionsForImporter" value="-Xmx768m" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1bAoXbZT5H5leaWq0vMTsgJUgUv" />
+  <component name="ProjectViewState">
+    <option name="abbreviatePackageNames" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/wang/client" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.wang" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\APP\IDEA\workplace\demo-cems\src\main\java\com\wang\client" />
+      <recent name="D:\APP\IDEA\workplace\demo-cems\src\main\java\com\wang\utils" />
+      <recent name="D:\APP\IDEA\workplace\demo-cems\src\main\resources" />
+      <recent name="D:\APP\IDEA\workplace\demo-cems\src\main\java\com\wang" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\APP\IDEA\workplace\demo-cems\src\main\java\com\wang\utils" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.UdpClientFrame">
+    <configuration name="Crc" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.wang.utils.Crc" />
+      <module name="demo-cems" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.wang.utils.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ReadProperties" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.wang.utils.ReadProperties" />
+      <module name="demo-cems" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.wang.utils.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StringToAscii" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.wang.utils.StringToAscii" />
+      <module name="demo-cems" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.wang.utils.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UdpClientFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.wang.client.UdpClientFrame" />
+      <module name="demo-cems" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.wang.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UdpServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.wang.server.UdpServer" />
+      <module name="demo-cems" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.wang.entity.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UdpServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.wang.server.UdpServer" />
+      <module name="demo-cems" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.wang.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.UdpClientFrame" />
+        <item itemvalue="Application.UdpServer" />
+        <item itemvalue="Application.Crc" />
+        <item itemvalue="Application.StringToAscii" />
+        <item itemvalue="Application.ReadProperties" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fa54ce62-4e23-4381-9145-ed5dd7542372" name="Default Changelist" comment="" />
+      <created>1588084299738</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1588084299738</updated>
+      <workItem from="1588084303378" duration="30116000" />
+      <workItem from="1588161583787" duration="620000" />
+      <workItem from="1588216940015" duration="8640000" />
+      <workItem from="1588291701517" duration="11070000" />
+      <workItem from="1588427281704" duration="782000" />
+      <workItem from="1588497596686" duration="665000" />
+      <workItem from="1588561102093" duration="23422000" />
+      <workItem from="1588643658322" duration="7733000" />
+      <workItem from="1588727158654" duration="391000" />
+      <workItem from="1589694752965" duration="10282000" />
+      <workItem from="1589788202893" duration="4235000" />
+      <workItem from="1590058931402" duration="1566000" />
+      <workItem from="1590060583339" duration="409000" />
+      <workItem from="1590061057523" duration="1701000" />
+      <workItem from="1590139325743" duration="4501000" />
+      <workItem from="1590218799282" duration="5881000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="275" y="22" key="#Notifications" timestamp="1588427367137">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="22" key="#Notifications/0.0.1366.728@0.0.1366.728" timestamp="1588427367137" />
+    <state x="488" y="47" key="#com.intellij.ide.util.MemberChooser" timestamp="1588086041979">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="488" y="47" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1588086041979" />
+    <state width="1323" height="207" key="GridCell.Tab.0.bottom" timestamp="1590229795223">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="207" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590229795223" />
+    <state width="1323" height="207" key="GridCell.Tab.0.center" timestamp="1590229795222">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="207" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1590229795222" />
+    <state width="1323" height="207" key="GridCell.Tab.0.left" timestamp="1590229795222">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="207" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1590229795222" />
+    <state width="1323" height="207" key="GridCell.Tab.0.right" timestamp="1590229795223">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="207" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1590229795223" />
+    <state width="1323" height="141" key="GridCell.Tab.1.bottom" timestamp="1588160199633">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="141" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1588160199633" />
+    <state width="1323" height="141" key="GridCell.Tab.1.center" timestamp="1588160199633">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="141" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1588160199633" />
+    <state width="1323" height="141" key="GridCell.Tab.1.left" timestamp="1588160199633">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="141" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1588160199633" />
+    <state width="1323" height="141" key="GridCell.Tab.1.right" timestamp="1588160199633">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="141" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1588160199633" />
+    <state x="184" y="0" key="SettingsEditor" timestamp="1590143344307">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="184" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1590143344307" />
+    <state x="57" y="58" key="new project wizard" timestamp="1588727547877">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="57" y="58" key="new project wizard/0.0.1366.728@0.0.1366.728" timestamp="1588727547877" />
+    <state x="359" y="210" width="716" height="308" key="org.intellij.images.editor.actions.BackgroundImageDialog" timestamp="1588589910696">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="359" y="210" width="716" height="308" key="org.intellij.images.editor.actions.BackgroundImageDialog/0.0.1366.728@0.0.1366.728" timestamp="1588589910696" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1588589862363">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1588589862363" />
+  </component>
+</project>
