@@ -113,4 +113,22 @@ public class ReadProperties {
         return map;
     }
 
+    public Map<String,String> readTable(){
+        InputStream inputStream = ReadProperties.class.getClassLoader().getResourceAsStream("table.properties");
+        Properties props = new Properties();
+        try {
+            props.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        Map<String,String> map = new HashMap<>();
+        Iterator<String> iterator = props.stringPropertyNames().iterator();
+
+        while (iterator.hasNext()){
+            String key = iterator.next();
+            map.put(key,props.getProperty(key));
+        }
+
+        return map;
+    }
 }

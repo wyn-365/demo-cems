@@ -11,6 +11,8 @@ import lombok.SneakyThrows;
 import java.awt.*;
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -131,7 +133,7 @@ public class UdpClientFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         jLabel1.setText("IP地址");
         jLabel2.setText("端口");
-        jLabel5.setText("时间段查询区");
+        jLabel5.setText("时间");
         jTextField3.setText("2020-01-01");
         jTextField4.setText("2020-02-03");
 
@@ -348,22 +350,27 @@ public class UdpClientFrame extends javax.swing.JFrame {
         // 拿到前台的数据表
         String selectItem = (String) jcbb.getSelectedItem();
 
+
+        // 根据数据表 读取命令编码
+        String Code = codeMap.get(selectItem);
+
+        LocalDateTime dateTime = LocalDateTime.now();
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyyMMddhhmmss");
+        String format = dateTime.format(pattern);
+
         // 即将发送的数据段报
         msg = jTextArea2.getText();
-        String sendData = "ST="+protocolDo.getST()+";"+"CN=2011"+";"+"PW="+protocolDo.getPW()+";"+"MN="+protocolDo.getID()+";"+"CP=&&"+ msg;
+        String sendData = "ST="+protocolDo.getST()+";"+ "CN="+Code +";"+"PW="+protocolDo.getPW()+";"+"MN="+protocolDo.getID()+";"+"CP=&&DateTime="+ format +";"+ msg;
 
         // 冗余码
         Crc crc = new Crc();
         String makeCrc = crc.Make_CRC(sendData.getBytes());
 
-        // 读取命令编码
-        String Code = codeMap.get(selectItem);
-
         // 数据段的ascii数
         StringToAscii stringToAscii = new StringToAscii();
         String strToAsc = stringToAscii.StrToAsc(sendData);
 
-        String sendMsg = "[CN=" + Code + "]##"+ strToAsc + sendData + makeCrc;
+        String sendMsg = "[CN=" + Code + "]##"+ strToAsc + sendData + "&&" +makeCrc;
         jTextArea1.append("已发送 : "+ sendMsg +"\n");
         jTextArea2.setText(null);
         try {
@@ -402,17 +409,18 @@ public class UdpClientFrame extends javax.swing.JFrame {
         }
 
         // 时间区域查询数据库数据
-        // 开始的时间
         String text3 = jTextField3.getText();
         String text4 = jTextField4.getText();
 
+        // 读取数据表字段
+        Map<String, String> tableMap = readProperties.readTable();
 
 
         if(null == selectItem || selectItem.equals("")){
             System.out.println("开始进行查表初始化！");
-        }else if(selectItem.equals("historydata1")){
+        }else {
             try {
-                String sql = " SELECT * FROM historydata1 WHERE dt BETWEEN ? AND ?";
+                String sql = " SELECT * FROM "+table+" WHERE dt BETWEEN ? AND ?";
                 PreparedStatement pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1,text3);
                 pstmt.setString(2,text4);
@@ -420,73 +428,73 @@ public class UdpClientFrame extends javax.swing.JFrame {
                 while(rs.next()) {
                     int id = rs.getInt("id");
                     Timestamp timestamp = rs.getTimestamp("dt");
-                    double FLOWD = rs.getDouble("FLOWD");
-                    double FLOWDMAX = rs.getDouble("FLOWDMAX");
-                    double FLOWDMIN = rs.getDouble("FLOWDMIN");
-                    double FLOWDAVG  = rs.getDouble("FLOWDAVG");
-                    double DUSTMIN   = rs.getDouble("DUSTMIN");
-                    double DUSTS     = rs.getDouble("DUSTS");
-                    double DUSTMAX   = rs.getDouble("DUSTMAX");
-                    double ZSDUSTMIN = rs.getDouble("ZSDUSTMIN");
-                    double ZSDUSTAVG = rs.getDouble("ZSDUSTAVG");
-                    double ZSDUSTMAX = rs.getDouble("ZSDUSTMAX");
-                    double DUST      = rs.getDouble("DUST");
-                    double SO2MIN    = rs.getDouble("SO2MIN");
-                    double SO2AVG    = rs.getDouble("SO2AVG");
-                    double SO2MAX    = rs.getDouble("SO2MAX");
-                    double ZSSO2MIN  = rs.getDouble("ZSSO2MIN");
-                    double ZSSO2AVG  = rs.getDouble("ZSSO2AVG");
-                    double ZSSO2MAX  = rs.getDouble("ZSSO2MAX");
-                    double SO2       = rs.getDouble("SO2");
-                    double NOXMIN    = rs.getDouble("NOXMIN");
-                    double NOXAVG    = rs.getDouble("NOXAVG");
-                    double NOXMAX    = rs.getDouble("NOXMAX");
-                    double ZSNOXMIN  = rs.getDouble("ZSNOXMIN");
-                    double ZSNOXAVG  = rs.getDouble("ZSNOXAVG");
-                    double ZSNOXMAX  = rs.getDouble("ZSNOXMAX");
-                    double NOX       = rs.getDouble("NOX");
-                    double O2MIN     = rs.getDouble("O2MIN");
-                    double O2AVG     = rs.getDouble("O2AVG");
-                    double O2MAX     = rs.getDouble("O2MAX");
-                    double FVMIN     = rs.getDouble("FVMIN");
-                    double FVAVG     = rs.getDouble("FVAVG");
-                    double FVMAX     = rs.getDouble("FVMAX");
-                    double TMIN      = rs.getDouble("TMIN");
-                    double TS        = rs.getDouble("TS");
-                    double TMAX      = rs.getDouble("TMAX");
-                    double HMMIN     = rs.getDouble("HMMIN");
-                    double HMS       = rs.getDouble("HMS");
-                    double HMMAX     = rs.getDouble("HMMAX");
-                    double MJMIN     = rs.getDouble("MJMIN");
-                    double MJAVG     = rs.getDouble("MJAVG");
-                    double MJMAX     = rs.getDouble("MJMAX");
-                    double PMIN      = rs.getDouble("PMIN");
-                    double PS        = rs.getDouble("PS");
-                    double PMAX      = rs.getDouble("PMAX");
-                    double NH3MIN    = rs.getDouble("NH3MIN");
-                    double NH3AVG    = rs.getDouble("NH3AVG");
-                    double NH3MAX    = rs.getDouble("NH3MAX");
-                    double ZSHN3MIN  = rs.getDouble("ZSHN3MIN");
-                    double ZSNH3AVG  = rs.getDouble("ZSNH3AVG");
-                    double ZSNH3MAX  = rs.getDouble("ZSNH3MAX");
-                    double NH3       = rs.getDouble("NH3");
-                    msg = "[" + String.valueOf(timestamp) +"],"+ String.valueOf(id) +","+ "FLOWD="+ String.valueOf(FLOWD) +","+ "FLOWDMAX="+ String.valueOf(FLOWDMAX)+","+ "FLOWDMIN="+ String.valueOf(FLOWDMIN)+ ","+
-                           "FLOWDAVG="+ String.valueOf(FLOWDAVG) +","+ "DUSTMIN="+ String.valueOf(DUSTMIN)+","+ "DUSTS="+ String.valueOf(DUSTS)+ ","+
-                           "DUSTMAX="+ String.valueOf(DUSTMAX) +","+ "ZSDUSTMIN="+ String.valueOf(ZSDUSTMIN)+","+ "ZSDUSTAVG="+ String.valueOf(ZSDUSTAVG)+ ","+
-                           "ZSDUSTMAX="+ String.valueOf(ZSDUSTMAX) +","+ "DUST="+ String.valueOf(DUST)+","+ "SO2MIN="+ String.valueOf(SO2MIN)+ ","+
-                           "SO2AVG="+ String.valueOf(SO2AVG) +","+ "SO2MAX="+ String.valueOf(SO2MAX)+","+ "ZSSO2MIN="+ String.valueOf(ZSSO2MIN)+ ","+
-                           "ZSSO2AVG="+ String.valueOf(ZSSO2AVG) +","+ "ZSSO2MAX="+ String.valueOf(ZSSO2MAX)+","+ "SO2="+String.valueOf(SO2)+ ","+
-                           "NOXMIN="+ String.valueOf(NOXMIN) +","+ "NOXAVG="+ String.valueOf(NOXAVG)+","+ "NOXMAX="+ String.valueOf(NOXMAX)+ ","+
-                           "ZSNOXMIN="+ String.valueOf(ZSNOXMIN) +","+ "ZSNOXAVG="+ String.valueOf(ZSNOXAVG)+","+ "ZSNOXMAX="+ String.valueOf(ZSNOXMAX)+ ","+
-                           "NOX="+ String.valueOf(NOX) +","+ String.valueOf(O2MIN)+","+ String.valueOf(O2AVG)+ ","+
-                           "O2MAX="+ String.valueOf(O2MAX) +","+ "FVMIN="+ String.valueOf(FVMIN)+","+ "FVAVG="+ String.valueOf(FVAVG)+ ","+
-                           "FVMAX="+ String.valueOf(FVMAX) +","+ "TMIN="+ String.valueOf(TMIN)+","+ "TS="+ String.valueOf(TS)+ ","+
-                           "TMAX="+ String.valueOf(TMAX) +","+ "HMMIN="+ String.valueOf(HMMIN)+","+ "HMS="+ String.valueOf(HMS)+ ","+
-                           "HMMAX="+ String.valueOf(HMMAX) +","+ "MJMIN="+ String.valueOf(MJMIN)+","+ "MJAVG="+ String.valueOf(MJAVG)+ ","+
-                           "MJMAX="+ String.valueOf(MJMAX) +","+ "PMIN="+ String.valueOf(PMIN)+","+ "PS="+ String.valueOf(PS)+ ","+
-                           "PMAX="+ String.valueOf(PMAX) +","+ "NH3MIN="+ String.valueOf(NH3MIN)+","+ "NH3AVG="+ String.valueOf(NH3AVG)+ ","+
-                           "NH3MAX="+ String.valueOf(NH3MAX) +","+ "ZSHN3MIN="+ String.valueOf(ZSHN3MIN)+","+ "ZSNH3AVG="+ String.valueOf(ZSNH3AVG)+ ","+
-                           "ZSNH3MAX="+ String.valueOf(ZSNH3MAX) +","+ "NH3="+ String.valueOf(NH3);
+                    double FLOWD = rs.getDouble(tableMap.get("B02-Cou"));
+                    double FLOWDMAX = rs.getDouble(tableMap.get("B02-Max"));
+                    double FLOWDMIN = rs.getDouble(tableMap.get("B02-Min"));
+                    double FLOWDAVG  = rs.getDouble(tableMap.get("B02-Avg"));
+                    double DUSTMIN   = rs.getDouble(tableMap.get("01-Min"));
+                    double DUSTS     = rs.getDouble(tableMap.get("01-Avg"));
+                    double DUSTMAX   = rs.getDouble(tableMap.get("01-Max"));
+                    double ZSDUSTMIN = rs.getDouble(tableMap.get("01-ZsMin"));
+                    double ZSDUSTAVG = rs.getDouble(tableMap.get("01-ZsAvg"));
+                    double ZSDUSTMAX = rs.getDouble(tableMap.get("01-ZsMax"));
+                    double DUST      = rs.getDouble(tableMap.get("01-Cou"));
+                    double SO2MIN    = rs.getDouble(tableMap.get("02-Min"));
+                    double SO2AVG    = rs.getDouble(tableMap.get("02-Avg"));
+                    double SO2MAX    = rs.getDouble(tableMap.get("02-Max"));
+                    double ZSSO2MIN  = rs.getDouble(tableMap.get("02-ZsMin"));
+                    double ZSSO2AVG  = rs.getDouble(tableMap.get("02-ZsAvg"));
+                    double ZSSO2MAX  = rs.getDouble(tableMap.get("02-ZsMax"));
+                    double SO2       = rs.getDouble(tableMap.get("02-Cou"));
+                    double NOXMIN    = rs.getDouble(tableMap.get("03-Min"));
+                    double NOXAVG    = rs.getDouble(tableMap.get("03-Avg"));
+                    double NOXMAX    = rs.getDouble(tableMap.get("03-Max"));
+                    double ZSNOXMIN  = rs.getDouble(tableMap.get("03-ZsMin"));
+                    double ZSNOXAVG  = rs.getDouble(tableMap.get("03-ZsAvg"));
+                    double ZSNOXMAX  = rs.getDouble(tableMap.get("03-ZsMax"));
+                    double NOX       = rs.getDouble(tableMap.get("03-Cou"));
+                    double O2MIN     = rs.getDouble(tableMap.get("S01-Min"));
+                    double O2AVG     = rs.getDouble(tableMap.get("S01-Avg"));
+                    double O2MAX     = rs.getDouble(tableMap.get("S01-Max"));
+                    double FVMIN     = rs.getDouble(tableMap.get("S02-Min"));
+                    double FVAVG     = rs.getDouble(tableMap.get("S02-Avg"));
+                    double FVMAX     = rs.getDouble(tableMap.get("S02-Max"));
+                    double TMIN      = rs.getDouble(tableMap.get("S03-Min"));
+                    double TS        = rs.getDouble(tableMap.get("S03-Avg"));
+                    double TMAX      = rs.getDouble(tableMap.get("S03-Max"));
+                    double HMMIN     = rs.getDouble(tableMap.get("S05-Min"));
+                    double HMS       = rs.getDouble(tableMap.get("S05-Avg"));
+                    double HMMAX     = rs.getDouble(tableMap.get("S05-Max"));
+                    double MJMIN     = rs.getDouble(tableMap.get("S07-Min"));
+                    double MJAVG     = rs.getDouble(tableMap.get("S07-Avg"));
+                    double MJMAX     = rs.getDouble(tableMap.get("S07-Max"));
+                    double PMIN      = rs.getDouble(tableMap.get("S08-Min"));
+                    double PS        = rs.getDouble(tableMap.get("S08-Avg"));
+                    double PMAX      = rs.getDouble(tableMap.get("S08-Max"));
+                    double NH3MIN    = rs.getDouble(tableMap.get("10-Min"));
+                    double NH3AVG    = rs.getDouble(tableMap.get("10-Avg"));
+                    double NH3MAX    = rs.getDouble(tableMap.get("10-Max"));
+                    double ZSHN3MIN  = rs.getDouble(tableMap.get("10-ZsMin"));
+                    double ZSNH3AVG  = rs.getDouble(tableMap.get("10-ZsAvg"));
+                    double ZSNH3MAX  = rs.getDouble(tableMap.get("10-ZsMax"));
+                    double NH3       = rs.getDouble(tableMap.get("10-Cou"));
+                    msg = "[" + String.valueOf(timestamp) +"],"+ String.valueOf(id) +","+ "B02-Cou="+ String.valueOf(FLOWD) +","+ "B02-Max="+ String.valueOf(FLOWDMAX)+","+ "B02-Min="+ String.valueOf(FLOWDMIN)+ ","+
+                           "B02-Avg="+ String.valueOf(FLOWDAVG) +","+ "01-Min="+ String.valueOf(DUSTMIN)+","+ "01-Avg="+ String.valueOf(DUSTS)+ ","+
+                           "01-Max="+ String.valueOf(DUSTMAX) +","+ "01-ZsMin="+ String.valueOf(ZSDUSTMIN)+","+ "01-ZsAvg="+ String.valueOf(ZSDUSTAVG)+ ","+
+                           "01-ZsMax="+ String.valueOf(ZSDUSTMAX) +","+ "01-Cou="+ String.valueOf(DUST)+","+ "02-Min="+ String.valueOf(SO2MIN)+ ","+
+                           "02-Avg="+ String.valueOf(SO2AVG) +","+ "02-Max="+ String.valueOf(SO2MAX)+","+ "02-ZsMin="+ String.valueOf(ZSSO2MIN)+ ","+
+                           "02-ZsAvg="+ String.valueOf(ZSSO2AVG) +","+ "02-ZsMax="+ String.valueOf(ZSSO2MAX)+","+ "02-Cou="+String.valueOf(SO2)+ ","+
+                           "03-Min="+ String.valueOf(NOXMIN) +","+ "03-Avg="+ String.valueOf(NOXAVG)+","+ "03-Max="+ String.valueOf(NOXMAX)+ ","+
+                           "03-ZsMin="+ String.valueOf(ZSNOXMIN) +","+ "03-ZsAvg="+ String.valueOf(ZSNOXAVG)+","+ "03-ZsMax="+ String.valueOf(ZSNOXMAX)+ ","+
+                           "03-Cou="+ String.valueOf(NOX) +","+ "S01-Min="+ String.valueOf(O2MIN)+","+ "S01-Avg="+ String.valueOf(O2AVG)+ ","+
+                           "S01-Max="+ String.valueOf(O2MAX) +","+ "S02-Min="+ String.valueOf(FVMIN)+","+ "S02-Avg="+ String.valueOf(FVAVG)+ ","+
+                           "S02-Max="+ String.valueOf(FVMAX) +","+ "S03-Min="+ String.valueOf(TMIN)+","+ "S03-Avg="+ String.valueOf(TS)+ ","+
+                           "S03-Max="+ String.valueOf(TMAX) +","+ "S05-Min="+ String.valueOf(HMMIN)+","+ "S05-Avg="+ String.valueOf(HMS)+ ","+
+                           "S05-Max="+ String.valueOf(HMMAX) +","+ "S07-Min="+ String.valueOf(MJMIN)+","+ "S07-Avg="+ String.valueOf(MJAVG)+ ","+
+                           "S07-Max="+ String.valueOf(MJMAX) +","+ "S08-Min="+ String.valueOf(PMIN)+","+ "S08-Avg="+ String.valueOf(PS)+ ","+
+                           "S08-Max="+ String.valueOf(PMAX) +","+ "10-Min="+ String.valueOf(NH3MIN)+","+ "10-Avg="+ String.valueOf(NH3AVG)+ ","+
+                           "10-Max="+ String.valueOf(NH3MAX) +","+ "10-ZsMin="+ String.valueOf(ZSHN3MIN)+","+ "10-ZsAvg="+ String.valueOf(ZSNH3AVG)+ ","+
+                           "10-ZsMax="+ String.valueOf(ZSNH3MAX) +","+ "10-Cou="+ String.valueOf(NH3);
                     jTextArea1.append(msg + "\n");
                 }
                 jTextArea2.setText(null);
@@ -497,47 +505,7 @@ public class UdpClientFrame extends javax.swing.JFrame {
                 // 关闭数据库连接
                 conn.close();
             }
-        }else if(selectItem.equals("MinutesTable")){
-            try {
-                String sql = " SELECT * FROM MinutesTable WHERE dt BETWEEN ? AND ?";
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                pstmt.setString(1,text3);
-                pstmt.setString(2,text4);
-                ResultSet rs= pstmt.executeQuery();
-                while(rs.next()) {
-                    int id = rs.getInt("id");
-                    Timestamp timestamp = rs.getTimestamp("dt");
-                    double VER1 = rs.getDouble("VER1");
-                    double VER10 = rs.getDouble("VER10");
-                    double VER2 = rs.getDouble("VER2");
-                    double VER3 = rs.getDouble("VER3");
-                    double VER4 = rs.getDouble("VER4");
-                    double VER5 = rs.getDouble("VER5");
-                    double VER6 = rs.getDouble("VER6");
-                    double VER7 = rs.getDouble("VER7");
-                    double VER8 = rs.getDouble("VER8");
-                    double VER9 = rs.getDouble("VER9");
-
-                    msg =   "[" + String.valueOf(timestamp) +"],"+ String.valueOf(id) +","+
-                            "VER1="+ String.valueOf(VER1) +","+ "VER10="+ String.valueOf(VER10)+","+ "VER2="+String.valueOf(VER2)+ ","+
-                            "VER3="+ String.valueOf(VER3) +","+ "VER4="+ String.valueOf(VER4)+","+ "VER5="+ String.valueOf(VER5)+ ","+
-                            "VER6="+ String.valueOf(VER6) +","+ "VER7="+ String.valueOf(VER7)+","+ "VER8="+ String.valueOf(VER8)+ ","+
-                            "VER9="+ String.valueOf(VER9);
-                    jTextArea1.append(msg + "\n");
-                }
-                jTextArea2.setText(null);
-
-            } catch (Exception ex) {
-                Logger.getLogger(UdpClientFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }finally {
-                // 关闭数据库连接
-                conn.close();
-            }
-        }else{
-            System.out.println("还没有该表的查表逻辑！");
         }
-
-
 
 
         System.out.println("开始时间:"+text3);
