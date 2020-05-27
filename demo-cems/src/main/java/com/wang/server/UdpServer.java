@@ -45,10 +45,10 @@ public class UdpServer {
     public void service(){
         while(true){
             try{
-                DatagramPacket packet =new DatagramPacket(new byte[512],512);
+                DatagramPacket packet =new DatagramPacket(new byte[1024],1024);
                 socket.receive(packet);
                 String msg = new String(packet.getData(),0,packet.getLength(),"GB2312");
-                System.out.println(packet.getAddress()+" : "+packet.getPort()+">"+msg);
+                System.out.println(packet.getAddress()+" : "+packet.getPort()+":"+ packet.getLength() +">"+msg);
                 packet.setData(echo(msg).getBytes("GB2312"));
                 socket.send(packet);
             }catch(IOException e){

@@ -1,5 +1,9 @@
 package com.wang.client;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -10,6 +14,7 @@ import java.net.InetAddress;
  * @date 2020/4/29 15:01
  */
 public class UdpClient {
+
 
     /**
      * 远端端口、ip、socket
@@ -40,7 +45,7 @@ public class UdpClient {
     public void send(String msg){
         try {
             //先准备一个待发送的数据报
-            byte[] outputData=msg.getBytes("GB2312");
+            byte[] outputData = msg.getBytes("GB2312");
             //构建一个数据报文。
             DatagramPacket outputPacket=new DatagramPacket(outputData,
                     outputData.length,remoteIP,remotePort);
@@ -55,7 +60,7 @@ public class UdpClient {
     public String receive(){
         String msg;
         //先准备一个空数据报文
-        DatagramPacket inputPacket=new DatagramPacket(new byte[512],512);
+        DatagramPacket inputPacket=new DatagramPacket(new byte[1024],1024);
         try {
             //阻塞语句，有数据就装包，以装完或装满为此.
             socket.receive(inputPacket);

@@ -8,12 +8,14 @@ import com.wang.utils.SqlConn;
 import com.wang.utils.StringToAscii;
 import lombok.SneakyThrows;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,7 +42,6 @@ public class UdpClientFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
 
-
     /**
      * 时间输入区域
      */
@@ -48,7 +49,7 @@ public class UdpClientFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField4;
 
     /**
-     * 数据表
+     * 数据表下拉列表
      */
     private javax.swing.JComboBox<String> jcbb;
 
@@ -58,7 +59,6 @@ public class UdpClientFrame extends javax.swing.JFrame {
      */
     private UdpClient ec;
     private String msg;
-
 
     /**
      * 主方法，方法入口
@@ -93,7 +93,7 @@ public class UdpClientFrame extends javax.swing.JFrame {
                 try {
                     UdpClientFrame ioj =new UdpClientFrame();
                     ioj.setVisible(true);
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(UdpClientFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -104,7 +104,7 @@ public class UdpClientFrame extends javax.swing.JFrame {
     /**
      * 创建一个 IOJFrame
      */
-    public UdpClientFrame() throws IOException {
+    public UdpClientFrame() throws Exception {
         initComponents();
     }
 
@@ -112,7 +112,8 @@ public class UdpClientFrame extends javax.swing.JFrame {
      * 组件的初始化的方法
      */
     @SuppressWarnings("unchecked")
-    private void initComponents() {
+    private void initComponents() throws Exception {
+
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -136,6 +137,17 @@ public class UdpClientFrame extends javax.swing.JFrame {
         jLabel5.setText("时间");
         jTextField3.setText("2020-01-01");
         jTextField4.setText("2020-02-03");
+
+        ReadProperties readProperties = new ReadProperties();
+        Map<String, String> tableCodeMap = readProperties.readCode();
+        Set<String> set = tableCodeMap.keySet();
+        for (String key: set){
+            System.out.println(key);
+            jcbb.addItem(key);
+        }
+
+
+
 
         /**
          * 文本域1的监听事件
@@ -232,6 +244,7 @@ public class UdpClientFrame extends javax.swing.JFrame {
          * 按钮3的监听事件
          */
         jButton3.addActionListener(new java.awt.event.ActionListener() {
+            @SneakyThrows
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -341,7 +354,7 @@ public class UdpClientFrame extends javax.swing.JFrame {
      * 数据发送的方法
      * @param evt
      */
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) throws Exception {
         // 读取报文头格式
         ReadProperties readProperties = new ReadProperties();
         ProtocolDo protocolDo = readProperties.readProtocol();
@@ -350,17 +363,18 @@ public class UdpClientFrame extends javax.swing.JFrame {
         // 拿到前台的数据表
         String selectItem = (String) jcbb.getSelectedItem();
 
-
         // 根据数据表 读取命令编码
         String Code = codeMap.get(selectItem);
 
+        System.out.println("数据表编码是--------------：" + Code);
+
         LocalDateTime dateTime = LocalDateTime.now();
-        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyyMMddhhmmss");
-        String format = dateTime.format(pattern);
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+        String formatTime = dateTime.format(pattern);
 
         // 即将发送的数据段报
         msg = jTextArea2.getText();
-        String sendData = "ST="+protocolDo.getST()+";"+ "CN="+Code +";"+"PW="+protocolDo.getPW()+";"+"MN="+protocolDo.getID()+";"+"CP=&&DateTime="+ format +";"+ msg;
+        String sendData = "ST="+protocolDo.getST()+";"+ "CN="+ Code +";"+"PW="+protocolDo.getPW()+";"+"MN="+protocolDo.getID()+";"+"CP=&&DateTime=" + msg;
 
         // 冗余码
         Crc crc = new Crc();
@@ -370,14 +384,18 @@ public class UdpClientFrame extends javax.swing.JFrame {
         StringToAscii stringToAscii = new StringToAscii();
         String strToAsc = stringToAscii.StrToAsc(sendData);
 
-        String sendMsg = "[CN=" + Code + "]##"+ strToAsc + sendData + "&&" +makeCrc;
-        jTextArea1.append("已发送 : "+ sendMsg +"\n");
+        // 服务器收到的数据报文
+        String sendMsg = "##"+ strToAsc + sendData + "&&" +makeCrc;
+
+        jTextArea1.append("[" +formatTime+ "]"+"[发送]"+ "["+selectItem+"]"+ "[CN=" + Code + "]" + sendMsg +"\n");
+
         jTextArea2.setText(null);
         try {
             // 发送报文数据
             ec.send(sendMsg);
         } catch (Exception ex) {
             Logger.getLogger(UdpClientFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
         }
     }
 
@@ -393,20 +411,11 @@ public class UdpClientFrame extends javax.swing.JFrame {
         Connection conn= SqlConn.getConn(dbDo.getDriver(), dbDo.getURL(), dbDo.getUSER(), dbDo.getPASSWORD());
         System.out.println("SqlServer连接成功与否："+ conn);
 
-        DatabaseMetaData md = conn.getMetaData();
-        ResultSet rs2 = md.getTables(null, null,"%", new String[] {"TABLE"});
-
         // 拿到前台的数据表
         String selectItem = (String) jcbb.getSelectedItem();
         System.out.println("拿到里面的表："+selectItem);
 
         String table = selectItem;
-
-        jcbb.removeAllItems();
-        while (rs2.next()) {
-            System.out.println("表名: "+rs2.getString("TABLE_NAME"));
-            jcbb.addItem(rs2.getString("TABLE_NAME"));
-        }
 
         // 时间区域查询数据库数据
         String text3 = jTextField3.getText();
@@ -415,19 +424,18 @@ public class UdpClientFrame extends javax.swing.JFrame {
         // 读取数据表字段
         Map<String, String> tableMap = readProperties.readTable();
 
-
         if(null == selectItem || selectItem.equals("")){
             System.out.println("开始进行查表初始化！");
         }else {
             try {
-                String sql = " SELECT * FROM "+table+" WHERE dt BETWEEN ? AND ?";
+                String sql = " SELECT * FROM "+table+" WHERE 时间 BETWEEN ? AND ?";
                 PreparedStatement pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1,text3);
                 pstmt.setString(2,text4);
                 ResultSet rs= pstmt.executeQuery();
                 while(rs.next()) {
-                    int id = rs.getInt("id");
-                    Timestamp timestamp = rs.getTimestamp("dt");
+                    int id = rs.getInt("ID");
+                    Timestamp timestamp = rs.getTimestamp("时间");
                     double FLOWD = rs.getDouble(tableMap.get("B02-Cou"));
                     double FLOWDMAX = rs.getDouble(tableMap.get("B02-Max"));
                     double FLOWDMIN = rs.getDouble(tableMap.get("B02-Min"));
@@ -460,16 +468,14 @@ public class UdpClientFrame extends javax.swing.JFrame {
                     double FVAVG     = rs.getDouble(tableMap.get("S02-Avg"));
                     double FVMAX     = rs.getDouble(tableMap.get("S02-Max"));
                     double TMIN      = rs.getDouble(tableMap.get("S03-Min"));
-                    double TS        = rs.getDouble(tableMap.get("S03-Avg"));
+                    double T        = rs.getDouble(tableMap.get("S03-Avg"));
                     double TMAX      = rs.getDouble(tableMap.get("S03-Max"));
                     double HMMIN     = rs.getDouble(tableMap.get("S05-Min"));
                     double HMS       = rs.getDouble(tableMap.get("S05-Avg"));
                     double HMMAX     = rs.getDouble(tableMap.get("S05-Max"));
-                    double MJMIN     = rs.getDouble(tableMap.get("S07-Min"));
-                    double MJAVG     = rs.getDouble(tableMap.get("S07-Avg"));
-                    double MJMAX     = rs.getDouble(tableMap.get("S07-Max"));
+                    double MJ     = rs.getDouble(tableMap.get("S07-Avg"));
                     double PMIN      = rs.getDouble(tableMap.get("S08-Min"));
-                    double PS        = rs.getDouble(tableMap.get("S08-Avg"));
+                    double P        = rs.getDouble(tableMap.get("S08-Avg"));
                     double PMAX      = rs.getDouble(tableMap.get("S08-Max"));
                     double NH3MIN    = rs.getDouble(tableMap.get("10-Min"));
                     double NH3AVG    = rs.getDouble(tableMap.get("10-Avg"));
@@ -478,7 +484,13 @@ public class UdpClientFrame extends javax.swing.JFrame {
                     double ZSNH3AVG  = rs.getDouble(tableMap.get("10-ZsAvg"));
                     double ZSNH3MAX  = rs.getDouble(tableMap.get("10-ZsMax"));
                     double NH3       = rs.getDouble(tableMap.get("10-Cou"));
-                    msg = "[" + String.valueOf(timestamp) +"],"+ String.valueOf(id) +","+ "B02-Cou="+ String.valueOf(FLOWD) +","+ "B02-Max="+ String.valueOf(FLOWDMAX)+","+ "B02-Min="+ String.valueOf(FLOWDMIN)+ ","+
+
+                    LocalDateTime dateTime = timestamp.toLocalDateTime();
+                    DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyMMddhhmmss");
+                    String format = dateTime.format(pattern);
+
+
+                    msg =  String.valueOf(id) +"->"+ format +","+ "B02-Cou="+ String.valueOf(FLOWD) +","+ "B02-Max="+ String.valueOf(FLOWDMAX)+","+ "B02-Min="+ String.valueOf(FLOWDMIN)+ ","+
                            "B02-Avg="+ String.valueOf(FLOWDAVG) +","+ "01-Min="+ String.valueOf(DUSTMIN)+","+ "01-Avg="+ String.valueOf(DUSTS)+ ","+
                            "01-Max="+ String.valueOf(DUSTMAX) +","+ "01-ZsMin="+ String.valueOf(ZSDUSTMIN)+","+ "01-ZsAvg="+ String.valueOf(ZSDUSTAVG)+ ","+
                            "01-ZsMax="+ String.valueOf(ZSDUSTMAX) +","+ "01-Cou="+ String.valueOf(DUST)+","+ "02-Min="+ String.valueOf(SO2MIN)+ ","+
@@ -488,10 +500,10 @@ public class UdpClientFrame extends javax.swing.JFrame {
                            "03-ZsMin="+ String.valueOf(ZSNOXMIN) +","+ "03-ZsAvg="+ String.valueOf(ZSNOXAVG)+","+ "03-ZsMax="+ String.valueOf(ZSNOXMAX)+ ","+
                            "03-Cou="+ String.valueOf(NOX) +","+ "S01-Min="+ String.valueOf(O2MIN)+","+ "S01-Avg="+ String.valueOf(O2AVG)+ ","+
                            "S01-Max="+ String.valueOf(O2MAX) +","+ "S02-Min="+ String.valueOf(FVMIN)+","+ "S02-Avg="+ String.valueOf(FVAVG)+ ","+
-                           "S02-Max="+ String.valueOf(FVMAX) +","+ "S03-Min="+ String.valueOf(TMIN)+","+ "S03-Avg="+ String.valueOf(TS)+ ","+
+                           "S02-Max="+ String.valueOf(FVMAX) +","+ "S03-Min="+ String.valueOf(TMIN)+","+ "S03-Avg="+ String.valueOf(T)+ ","+
                            "S03-Max="+ String.valueOf(TMAX) +","+ "S05-Min="+ String.valueOf(HMMIN)+","+ "S05-Avg="+ String.valueOf(HMS)+ ","+
-                           "S05-Max="+ String.valueOf(HMMAX) +","+ "S07-Min="+ String.valueOf(MJMIN)+","+ "S07-Avg="+ String.valueOf(MJAVG)+ ","+
-                           "S07-Max="+ String.valueOf(MJMAX) +","+ "S08-Min="+ String.valueOf(PMIN)+","+ "S08-Avg="+ String.valueOf(PS)+ ","+
+                           "S05-Max="+ String.valueOf(HMMAX) +","+ "S07-Avg="+ String.valueOf(MJ)+ ","+
+                           "S08-Min="+ String.valueOf(PMIN)+","+ "S08-Avg="+ String.valueOf(P)+ ","+
                            "S08-Max="+ String.valueOf(PMAX) +","+ "10-Min="+ String.valueOf(NH3MIN)+","+ "10-Avg="+ String.valueOf(NH3AVG)+ ","+
                            "10-Max="+ String.valueOf(NH3MAX) +","+ "10-ZsMin="+ String.valueOf(ZSHN3MIN)+","+ "10-ZsAvg="+ String.valueOf(ZSNH3AVG)+ ","+
                            "10-ZsMax="+ String.valueOf(ZSNH3MAX) +","+ "10-Cou="+ String.valueOf(NH3);

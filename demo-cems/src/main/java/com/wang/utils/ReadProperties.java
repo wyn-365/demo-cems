@@ -3,8 +3,10 @@ package com.wang.utils;
 import com.wang.entity.DbDo;
 import com.wang.entity.ProtocolDo;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -17,13 +19,15 @@ public class ReadProperties {
      * 读取数据库的方法
      * @return
      */
-    public DbDo readDB(){
+    public DbDo readDB() throws Exception {
         InputStream inputStream = ReadProperties.class.getClassLoader().getResourceAsStream("db.properties");
         Properties p = new Properties();
         try {
             p.load(inputStream);
         } catch (IOException e1) {
             e1.printStackTrace();
+        }finally {
+            inputStream.close();
         }
         String url = p.getProperty("url");
         String user = p.getProperty("user");
@@ -40,13 +44,15 @@ public class ReadProperties {
      * 读取协议的方法
      * @return
      */
-    public ProtocolDo readProtocol(){
+    public ProtocolDo readProtocol() throws Exception {
         InputStream inputStream = ReadProperties.class.getClassLoader().getResourceAsStream("protocol.properties");
         Properties p = new Properties();
         try {
             p.load(inputStream);
         } catch (IOException e1) {
             e1.printStackTrace();
+        }finally {
+            inputStream.close();
         }
         ProtocolDo protocolDo = new ProtocolDo();
 
@@ -92,13 +98,20 @@ public class ReadProperties {
     }
 
 
-    public Map<String,String> readCode(){
+    /**
+     * 数据表编码
+     * @return
+     */
+    public Map<String,String> readCode() throws Exception {
         InputStream inputStream = ReadProperties.class.getClassLoader().getResourceAsStream("db.properties");
+        BufferedReader bf = new BufferedReader(new InputStreamReader(inputStream));
         Properties props = new Properties();
         try {
-            props.load(inputStream);
+            props.load(bf);
         } catch (IOException e1) {
             e1.printStackTrace();
+        }finally {
+            inputStream.close();
         }
         Map<String,String> map = new HashMap<String, String>();
         Iterator<String> iterator = props.stringPropertyNames().iterator();
@@ -110,16 +123,23 @@ public class ReadProperties {
         map.remove("user");
         map.remove("password");
         System.out.println(map);
+
         return map;
     }
 
-    public Map<String,String> readTable(){
+    /**
+     * 数据字段与编码的对应
+     * @return
+     */
+    public Map<String,String> readTable() throws Exception {
         InputStream inputStream = ReadProperties.class.getClassLoader().getResourceAsStream("table.properties");
         Properties props = new Properties();
         try {
             props.load(inputStream);
         } catch (IOException e1) {
             e1.printStackTrace();
+        }finally {
+            inputStream.close();
         }
         Map<String,String> map = new HashMap<>();
         Iterator<String> iterator = props.stringPropertyNames().iterator();
