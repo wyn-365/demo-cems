@@ -1,9 +1,4 @@
 package com.wang.client;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -14,7 +9,6 @@ import java.net.InetAddress;
  * @date 2020/4/29 15:01
  */
 public class UdpClient {
-
 
     /**
      * 远端端口、ip、socket
