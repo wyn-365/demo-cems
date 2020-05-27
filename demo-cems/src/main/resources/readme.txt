@@ -8,13 +8,12 @@
   resources包
     db.properties:数据库配置
     protocol.properties:通讯协议配置
+    table.properties:数据库表配置
 
   * 软件采用读取properties的方式读取配置。
   * 本软件采用动态连接服务器ip,port，无需在配置文件中指定 。
 
-2.本软件前台采用动态查询数据库表，制定好数据库后，自动显示数据表。
-  后台目前只写死了historydata1，MinutesTable这两个数据表
-  由于未知数据表，没有做其他表的查询逻辑【待优化】。
+2.本软件可在配置文件中配置数据表。
 
 3.软件技术
   开发工具：IDEA【2019版/2020版】
