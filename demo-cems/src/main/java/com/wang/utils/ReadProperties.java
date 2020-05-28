@@ -103,9 +103,9 @@ public class ReadProperties {
      * @return
      */
     public Map<String,String> readCode() throws Exception {
-        InputStream inputStream = ReadProperties.class.getClassLoader().getResourceAsStream("db.properties");
-        BufferedReader bf = new BufferedReader(new InputStreamReader(inputStream));
         Properties props = new Properties();
+        InputStream inputStream = ReadProperties.class.getClassLoader().getResourceAsStream("db.properties");
+        BufferedReader bf = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
         try {
             props.load(bf);
         } catch (IOException e1) {

@@ -47,9 +47,9 @@ public class UdpServer {
             try{
                 DatagramPacket packet =new DatagramPacket(new byte[1024],1024);
                 socket.receive(packet);
-                String msg = new String(packet.getData(),0,packet.getLength(),"GB2312");
+                String msg = new String(packet.getData(),0,packet.getLength(),"UTF8");
                 System.out.println(packet.getAddress()+" : "+packet.getPort()+":"+ packet.getLength() +">"+msg);
-                packet.setData(echo(msg).getBytes("GB2312"));
+                packet.setData(echo(msg).getBytes("UTF8"));
                 socket.send(packet);
             }catch(IOException e){
                 System.out.println(e);

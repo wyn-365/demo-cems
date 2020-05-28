@@ -2,6 +2,7 @@ package com.wang.utils;
 
 /**
  * CRC16位校验，取8字节作数据报校验
+ * @author 尹
  */
 public class Crc {
     public String Make_CRC(byte[] data){
@@ -35,4 +36,5 @@ public class Crc {
         String c = Integer.toHexString(crc);
         return c.toUpperCase();
     }
+
 }
