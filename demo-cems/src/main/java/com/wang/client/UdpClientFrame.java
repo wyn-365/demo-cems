@@ -58,6 +58,7 @@ public class UdpClientFrame extends javax.swing.JFrame {
      * UdpClient客户端、消息体
      */
     private UdpClient ec;
+    private TcpClient tc;
     private String msg;
 
     /**
@@ -392,7 +393,7 @@ public class UdpClientFrame extends javax.swing.JFrame {
         jTextArea2.setText(null);
         try {
             // 发送报文数据
-            ec.send(sendMsg);
+            tc.send(sendMsg);
         } catch (Exception ex) {
             Logger.getLogger(UdpClientFrame.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
@@ -525,7 +526,7 @@ public class UdpClientFrame extends javax.swing.JFrame {
     }
 
     /**
-     * 连接UDP服务器的方法
+     * 连接TCP服务器的方法
      * @param evt
      */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -538,34 +539,26 @@ public class UdpClientFrame extends javax.swing.JFrame {
         }
         else{
             ip = "127.0.0.1";
-            port = "6666";
+            port = "8899";
         }
         try {
-            ec = new UdpClient(ip,port);
-            jTextArea1.append("UDP正在创建...\r\n");
+            tc = new TcpClient(ip,port);
+            jTextArea1.append("TCP正在创建...\r\n");
             Thread receiver = new Thread(){
                 @Override
                 public void run(){
                     String msg = null;
-                    while(true){
                         try{
-                            msg = ec.receive();
+                            msg = tc.receive();
                         } catch(Exception ex){
                             jTextArea1.append("套接字异常关闭!"+"\n");
-                        }
-                        if(msg!=null){
+                        }if(msg!=null){
                             jTextArea1.append(msg+"\n");
                         }
-                        else{
-                            jTextArea1.append("你的对话已关闭！"+"\n");
-                            break;
-                        }
-                    }
                 }};
             receiver.start();
-            jTextArea1.append("UDP创建成功...\r\n");
         } catch (IOException ex) {
-            jTextArea1.append("UDP创建失败...\r\n");
+            jTextArea1.append("TCP创建失败...\r\n");
         }
     }
 
